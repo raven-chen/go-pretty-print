@@ -422,7 +422,6 @@ func (d *dumpState) dump(v reflect.Value) {
 				vtf := vt.Field(i)
 				d.w.Write([]byte(vtf.Name))
 				d.w.Write(colonSpaceBytes)
-				d.ignoreNextIndent = true
 
 				// If the filed has tag "secret", print '*' instead of the real value for security reason.
 				if vtf.Tag.Get("secret") == "true" {
@@ -436,6 +435,7 @@ func (d *dumpState) dump(v reflect.Value) {
 						d.w.Write([]byte("secret tag only works on string type"))
 					}
 				} else {
+					d.ignoreNextIndent = true
 					d.dump(d.unpackValue(v.Field(i)))
 				}
 
