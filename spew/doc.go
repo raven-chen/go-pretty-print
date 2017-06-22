@@ -118,6 +118,13 @@ The following configuration options are available:
 		spewed to strings and sorted by those strings.  This is only
 		considered if SortKeys is true.
 
+	* DisableTypes
+ 		DisableTypes specifies whether to disable the printing of types.
+
+ 	* DisableLengths
+ 		DisableLengths specifies whether to disable the printing of lengths.
+ 		This also disables the printing of capacities.
+
 Dump Usage
 
 Simply call spew.Dump with a list of variables you want to dump:

@@ -98,6 +98,13 @@ type ConfigState struct {
 	// be spewed to strings and sorted by those strings.  This is only
 	// considered if SortKeys is true.
 	SpewKeys bool
+
+	// DisableTypes specifies whether to disable the printing of types.
+	DisableTypes bool
+
+	// DisableLengths specifies whether to disable the printing of lengths.
+	// This also disables the printing of capacities.
+	DisableLengths bool
 }
 
 // Config is the active configuration of the top-level functions.
