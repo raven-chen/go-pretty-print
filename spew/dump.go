@@ -251,6 +251,7 @@ func (d *dumpState) dumpSlice(v reflect.Value) {
 func (d *dumpState) dump(v reflect.Value) {
 	// Handle invalid reflect values immediately.
 	kind := v.Kind()
+
 	if kind == reflect.Invalid {
 		d.w.Write(invalidAngleBytes)
 		return
@@ -422,7 +423,22 @@ func (d *dumpState) dump(v reflect.Value) {
 				d.w.Write([]byte(vtf.Name))
 				d.w.Write(colonSpaceBytes)
 				d.ignoreNextIndent = true
-				d.dump(d.unpackValue(v.Field(i)))
+
+				// If the filed has tag "secret", print '*' instead of the real value for security reason.
+				if vtf.Tag.Get("secret") == "true" {
+					fieldValue := v.Field(i)
+					if fieldValue.Kind() == reflect.String {
+						length := len(fieldValue.String())
+						if length != 0 {
+							d.w.Write(secretBytes)
+						}
+					} else {
+						d.w.Write([]byte("secret tag only works on string type"))
+					}
+				} else {
+					d.dump(d.unpackValue(v.Field(i)))
+				}
+
 				if i < (numFields - 1) {
 					d.w.Write(commaNewlineBytes)
 				} else {
